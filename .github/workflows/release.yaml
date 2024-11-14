@@ -1,0 +1,24 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt-get install device-tree-compiler libboost-regex-dev libboost-system-dev gcc-riscv64-unknown-elf
+      - name: Build
+        run: make
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            spike
